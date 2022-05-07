@@ -2,11 +2,14 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"net/http"
 	"tools/strs"
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
+	gin.DefaultWriter = ioutil.Discard
 	ser := gin.Default()
 	ser.LoadHTMLGlob("templates/*")
 	ser.Use(Cors())
