@@ -1,0 +1,5 @@
+#配置
+server:
+  port: 8868 #端口
+
+isdebug: 1  # 0 不输出

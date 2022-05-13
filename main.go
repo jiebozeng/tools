@@ -4,20 +4,25 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
+	"tools/configs"
 	"tools/strs"
 )
 
 func main() {
-	gin.SetMode(gin.ReleaseMode)
-	gin.DefaultWriter = ioutil.Discard
+	configs.InitConfig()
+	if !configs.GetIsDebug() {
+		gin.SetMode(gin.ReleaseMode)
+		gin.DefaultWriter = ioutil.Discard
+	}
 	ser := gin.Default()
 	ser.LoadHTMLGlob("templates/*")
 	ser.Use(Cors())
 	ser.SetTrustedProxies([]string{"127.0.0.1"})
 	strsGroup := ser.Group("strs")
-	strsGroup.GET("/index",strs.StrToLowerIndex)
+	strsGroup.GET("/", strs.StrToLowerIndex)
+	strsGroup.GET("/index", strs.StrToLowerIndex)
 	strsGroup.POST("/strtolower", strs.StrToLower)
-	ser.Run(":8868")
+	ser.Run(":" + configs.GetPort())
 }
 
 // 处理跨域请求,支持options访问
